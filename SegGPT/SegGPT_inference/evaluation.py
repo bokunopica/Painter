@@ -27,15 +27,13 @@ if __name__ == "__main__":
     # for i in trange(len(dir_list)):
     for i in trange(len(dir_list)):
         item = dir_list[i]
-        if not 'normal' in item:
-            continue
         if not item.endswith("mask.png"):
             continue
         g_img = Image.open(f"{ground_truth_folder}/{item.replace('output_', '')}").convert('RGB')
         s_img = Image.open(f"{result_folder}/{item}").convert('RGB')
         dice = binary_dice(
-            s=np.asarray(s_img),
-            g=np.asarray(reverse_color(g_img)),
+            s=np.asarray(s_img.convert('1')),
+            g=np.asarray(reverse_color(g_img).convert('1')),
         )
         cnt+=1
         total_dice += dice
