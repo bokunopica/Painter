@@ -4,6 +4,7 @@ import numpy as np
 import cv2
 
 from PIL import Image
+from util.image_utils import reverse_color
 
 
 imagenet_mean = np.array([0.485, 0.456, 0.406])
@@ -53,7 +54,7 @@ def run_one_image(img, tgt, model, device):
     return output
 
 
-def inference_image(model, device, img_path, img2_paths, tgt2_paths, out_path):
+def inference_image(model, device, img_path, img2_paths, tgt2_paths, out_path, reverse_mask_color=False):
     res, hres = 448, 448
 
     image = Image.open(img_path).convert("RGB")
@@ -68,6 +69,8 @@ def inference_image(model, device, img_path, img2_paths, tgt2_paths, out_path):
         img2 = np.array(img2) / 255.
 
         tgt2 = Image.open(tgt2_path).convert("RGB")
+        if reverse_mask_color:
+            tgt2 = reverse_color(tgt2)
         tgt2 = tgt2.resize((res, hres), Image.NEAREST)
         tgt2 = np.array(tgt2) / 255.
 
@@ -99,8 +102,11 @@ def inference_image(model, device, img_path, img2_paths, tgt2_paths, out_path):
         size=[size[1], size[0]], 
         mode='nearest',
     ).permute(0, 2, 3, 1)[0].numpy()
+    mask_output = Image.fromarray((0.6 * output).astype(np.uint8))
     output = Image.fromarray((input_image * (0.6 * output / 255 + 0.4)).astype(np.uint8))
     output.save(out_path)
+    out_path_components = out_path.split('.')
+    mask_output.save(f"{out_path_components[0]}_mask.{out_path_components[1]}")
 
 
 def inference_video(model, device, vid_path, num_frames, img2_paths, tgt2_paths, out_path):
