@@ -105,15 +105,15 @@ if __name__ == "__main__":
         else:
             normal_list.append(item)
 
-    percentage = 0.1
+    percentage = 0.01
     random.seed(111)
     random.shuffle(benign_list)
     random.shuffle(malignant_list)
     random.shuffle(normal_list)
 
-    benign_list, _ = split_train_test(benign_list, 0.25)
-    malignant_list, _ = split_train_test(malignant_list, 0.25)
-    normal_list, _ = split_train_test(normal_list, 0.25)
+    # benign_list, _ = split_train_test(benign_list, 0.05)
+    # malignant_list, _ = split_train_test(malignant_list, 0.05)
+    # normal_list, _ = split_train_test(normal_list, 0.05)
 
     prompt_list = []
     inference_list = []
@@ -133,6 +133,9 @@ if __name__ == "__main__":
 
     for item in inference_list:
         input_image_list.append(f"{input_dir}/source/{item}")
+
+    print(len(prompt_list))
+    print(len(inference_list))
 
     model = prepare_model(ckpt_path, model, seg_type).to(device)
     print("Model loaded.")
