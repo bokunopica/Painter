@@ -1,24 +1,24 @@
 #!/bin/bash
-python SegGPT/SegGPT_train/main_train.py \
-    --batch_size 2 \
-    --accum_iter 16  \
-    --ckpt_path /home/pico/myCodes/Painter/SegGPT/SegGPT_inference/pretrained_seggpt/seggpt_vit_large.pth \
-    --num_mask_patches 784 \
-    --max_mask_patches_per_block 392 \
+python /home/qianq/mycodes/Painter/SegGPT/SegGPT_train/main_train.py \
+    --batch_size 1 \
+    --accum_iter 1  \
+    --ckpt_path /home/qianq/mycodes/Painter/SegGPT/SegGPT_inference/pretrained_seggpt/seggpt_vit_large.pth \
+    --num_mask_patches 392 \
+    --max_mask_patches_per_block 196 \
     --epochs 15 \
     --warmup_epochs 1 \
     --lr 1e-3 \
     --clip_grad 3 \
     --layer_decay 0.8 \
     --drop_path 0.1 \
-    --input_size 896 448 \
+    --input_size 448 224 \
     --save_freq 1 \
-    --data_path /mnt/c/data/breastCancer/processed \
+    --data_path /run/media/breastCancer/processed \
     --json_path  \
-    /mnt/c/data/breastCancer/processed/meta.json \
+    /run/media/breastCancer/processed/meta.json \
     --val_json_path \
-    /mnt/c/data/breastCancer/processed/meta.json \
+    /run/media/breastCancer/processed/meta.json \
     --output_dir output_dir/seggpt-finetune \
-    --log_dir output_dir/logs \
+    --log_dir output_dir/logs
     # --log_wandb \
 
