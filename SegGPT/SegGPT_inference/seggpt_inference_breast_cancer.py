@@ -85,11 +85,12 @@ if __name__ == "__main__":
     # args = get_args_parser()
 
     device = "cuda"
-    ckpt_path = "/home/pico/myCodes/Painter/SegGPT/SegGPT_inference/pretrained_seggpt/seggpt_vit_large.pth"
+    # ckpt_path = "/home/qianq/mycodes/Painter/SegGPT/SegGPT_inference/pretrained_seggpt/seggpt_vit_large.pth"
+    ckpt_path = "/home/qianq/mycodes/Painter/SegGPT/SegGPT_inference/pretrained_seggpt/seggpt_vit_large.pth"
     model = "seggpt_vit_large_patch16_input896x448"
     seg_type = "instance"
-    output_dir = "/mnt/c/data/breastCancer/results"
-    input_dir = "/mnt/c/data/breastCancer/processed"
+    output_dir = "/run/media/breastCancer/results"
+    input_dir = "/run/media/breastCancer/processed"
 
 
     # prompt inference split
@@ -105,7 +106,7 @@ if __name__ == "__main__":
         else:
             normal_list.append(item)
 
-    percentage = 0.01
+    percentage = 0.02 # benign=4 malignant=2 normal=1
     random.seed(111)
     random.shuffle(benign_list)
     random.shuffle(malignant_list)
@@ -120,6 +121,7 @@ if __name__ == "__main__":
 
     for _list in [benign_list, malignant_list, normal_list]:
         _train, _test = split_train_test(_list, percentage)
+        print(f"len={len(_train)}")
         prompt_list += _train
         inference_list += _test
 

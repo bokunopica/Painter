@@ -19,8 +19,8 @@ def binary_dice(s, g):
 
 
 if __name__ == "__main__":
-    ground_truth_folder = "/mnt/c/data/breastCancer/processed/target"
-    result_folder = "/mnt/c/data/breastCancer/results"
+    ground_truth_folder = "/run/media/breastCancer/processed/target"
+    result_folder = "/run/media/breastCancer/results"
     dir_list = os.listdir(result_folder)
     cnt = 0
     total_dice = 0
