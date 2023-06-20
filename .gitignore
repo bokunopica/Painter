@@ -13,3 +13,4 @@ datasets
 log.txt
 log*.txt
 *log.txt
+logs
