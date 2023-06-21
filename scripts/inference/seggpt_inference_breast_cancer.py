@@ -1,5 +1,6 @@
 import os
 import sys
+import json
 import argparse
 import random
 import torch
@@ -85,11 +86,6 @@ def split_train_test(source_list, percentage):
     return source_list[:cut_len], source_list[cut_len:]
 
 
-class SingleData(object):
-    def __init__(self) -> None:
-        pass
-
-
 if __name__ == "__main__":
     # args = get_args_parser()
 
@@ -98,23 +94,31 @@ if __name__ == "__main__":
     ckpt_path = "/home/qianq/mycodes/Painter/SegGPT/SegGPT_inference/pretrained_seggpt/seggpt_vit_large.pth"
     model = "seggpt_vit_large_patch16_input896x448"
     seg_type = "instance"
-    output_dir = "/run/media/breastCancer/results"
-    input_dir = "/run/media/breastCancer/processed"
+    output_dir = "/run/media/breastCancer/results_seggpt_prompt"
+    # input_dir = "/run/media/breastCancer/processed"
+
+    train_meta_dir = "/run/media/breastCancer/processed/meta_train.json"
+    test_meta_dir = "/run/media/breastCancer/processed/meta_test.json"
 
     # prompt inference split
-    total_source_list = os.listdir(f"{input_dir}/source")
+    with open(train_meta_dir, 'r') as f:
+        prompt_list = json.loads(f.read())
+
+    with open(test_meta_dir, 'r') as f:
+        inference_list = json.loads(f.read())
+
     benign_list = []
     malignant_list = []
     normal_list = []
-    for item in total_source_list:
-        if "benign" in item:
+    for item in prompt_list:
+        if "benign" == item['_class']:
             benign_list.append(item)
-        elif "malignant" in item:
+        elif "malignant" == item['_class']:
             malignant_list.append(item)
         else:
             normal_list.append(item)
 
-    percentage = 0.02  # benign=4 malignant=2 normal=1
+    percentage = 0.025  # benign=8 malignant=4 normal=2
     random.seed(111)
     random.shuffle(benign_list)
     random.shuffle(malignant_list)
@@ -138,11 +142,11 @@ if __name__ == "__main__":
     prompt_target = []
 
     for item in prompt_list:
-        prompt_image.append(f"{input_dir}/source/{item}")
-        prompt_target.append(f"{input_dir}/target/{item.replace('.png', '_mask.png')}")
+        prompt_image.append(item['image_path'])
+        prompt_target.append(item['target_path'])
 
     for item in inference_list:
-        input_image_list.append(f"{input_dir}/source/{item}")
+        input_image_list.append(item['image_path'])
 
     print(len(prompt_list))
     print(len(inference_list))
