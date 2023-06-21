@@ -1,14 +1,23 @@
 import os
+import sys
 import argparse
-
+import random
 import torch
 import numpy as np
-
-from seggpt_engine import inference_image
 from tqdm import trange
-import random
-import models_seggpt
 
+sys.path.append(
+    os.path.dirname(
+        os.path.dirname(
+            os.path.dirname(
+                os.path.abspath(__file__),
+            ),
+        )
+    )
+)
+
+from SegGPT.SegGPT_inference.seggpt_inference import inference_image
+from SegGPT.SegGPT_train import models_seggpt
 
 
 imagenet_mean = np.array([0.485, 0.456, 0.406])
@@ -72,7 +81,7 @@ def prepare_model(
 
 def split_train_test(source_list, percentage):
     total_len = len(source_list)
-    cut_len = int(percentage*total_len)
+    cut_len = int(percentage * total_len)
     return source_list[:cut_len], source_list[cut_len:]
 
 
@@ -92,21 +101,20 @@ if __name__ == "__main__":
     output_dir = "/run/media/breastCancer/results"
     input_dir = "/run/media/breastCancer/processed"
 
-
     # prompt inference split
     total_source_list = os.listdir(f"{input_dir}/source")
     benign_list = []
     malignant_list = []
     normal_list = []
     for item in total_source_list:
-        if 'benign' in item:
+        if "benign" in item:
             benign_list.append(item)
-        elif 'malignant' in item:
+        elif "malignant" in item:
             malignant_list.append(item)
         else:
             normal_list.append(item)
 
-    percentage = 0.02 # benign=4 malignant=2 normal=1
+    percentage = 0.02  # benign=4 malignant=2 normal=1
     random.seed(111)
     random.shuffle(benign_list)
     random.shuffle(malignant_list)
@@ -128,7 +136,7 @@ if __name__ == "__main__":
     input_image_list = []
     prompt_image = []
     prompt_target = []
-    
+
     for item in prompt_list:
         prompt_image.append(f"{input_dir}/source/{item}")
         prompt_target.append(f"{input_dir}/target/{item.replace('.png', '_mask.png')}")
@@ -141,7 +149,7 @@ if __name__ == "__main__":
 
     model = prepare_model(ckpt_path, model, seg_type).to(device)
     print("Model loaded.")
-    
+
     for i in trange(len(input_image_list)):
         input_image = input_image_list[i]
         img_name = os.path.basename(input_image)

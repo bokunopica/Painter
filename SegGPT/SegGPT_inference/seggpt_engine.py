@@ -4,7 +4,7 @@ import numpy as np
 import cv2
 
 from PIL import Image
-from util.image_utils import reverse_color
+from .util.image_utils import reverse_color
 
 
 imagenet_mean = np.array([0.485, 0.456, 0.406])

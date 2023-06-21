@@ -4,8 +4,8 @@ import argparse
 import torch
 import numpy as np
 
-from seggpt_engine import inference_image, inference_video
-import models_seggpt
+from .seggpt_engine import inference_image, inference_video
+from . import models_seggpt
 
 
 imagenet_mean = np.array([0.485, 0.456, 0.406])

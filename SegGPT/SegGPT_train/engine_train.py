@@ -13,13 +13,13 @@ from typing import Iterable
 
 import torch
 
-import util.misc as misc
-import util.lr_sched as lr_sched
+from .util import misc as misc
+from .util import lr_sched as lr_sched
 
 import numpy as np
 import wandb
 
-import models_seggpt
+from . import models_seggpt
 
 
 def get_loss_scale_for_deepspeed(model):
