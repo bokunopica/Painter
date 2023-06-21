@@ -86,15 +86,14 @@ def split_train_test(source_list, percentage):
     return source_list[:cut_len], source_list[cut_len:]
 
 
-if __name__ == "__main__":
-    # args = get_args_parser()
-
-    device = "cuda"
+def generate_outputs(model_path, save_dir, device, reverse_mask_color=False):
     # ckpt_path = "/home/qianq/mycodes/Painter/SegGPT/SegGPT_inference/pretrained_seggpt/seggpt_vit_large.pth"
+    ckpt_path = model_path
     ckpt_path = "/home/qianq/mycodes/Painter/SegGPT/SegGPT_inference/pretrained_seggpt/seggpt_vit_large.pth"
     model = "seggpt_vit_large_patch16_input896x448"
     seg_type = "instance"
-    output_dir = "/run/media/breastCancer/results_seggpt_prompt"
+    output_dir = save_dir
+    # output_dir = "/run/media/breastCancer/results_seggpt_prompt"
     # input_dir = "/run/media/breastCancer/processed"
 
     train_meta_dir = "/run/media/breastCancer/processed/meta_train.json"
@@ -167,6 +166,31 @@ if __name__ == "__main__":
             prompt_image,
             prompt_target,
             out_path,
-            reverse_mask_color=True,
+            reverse_mask_color=reverse_mask_color,
         )
     print("Finished.")
+
+
+if __name__ == "__main__":
+    # origin model
+    # generate_outputs(
+    #     model_path="/home/qianq/mycodes/Painter/SegGPT/SegGPT_inference/pretrained_seggpt/seggpt_vit_large.pth",
+    #     save_dir="/run/media/breastCancer/results_seggpt_origin",
+    #     device="cuda:0",
+    #     reverse_mask_color=True
+    # )
+
+    # finetuned model - 30 epochs
+    # generate_outputs(
+    #     model_path="/home/qianq/mycodes/Painter/output_dir/seggpt-finetune-breastCancer-01/checkpoint-29.pth",
+    #     save_dir="/run/media/breastCancer/results_seggpt_finetune_30",
+    #     device="cuda:1",
+    # )
+
+    # finetuned model - 300 epochs
+    generate_outputs(
+        model_path="/home/qianq/mycodes/Painter/output_dir/seggpt-finetune-breastCancer-02/checkpoint-299.pth",
+        save_dir="/run/media/breastCancer/results_seggpt_finetune_300",
+        device="cuda:0"
+    )
+    pass
