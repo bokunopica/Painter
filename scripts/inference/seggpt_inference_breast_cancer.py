@@ -87,14 +87,10 @@ def split_train_test(source_list, percentage):
 
 
 def generate_outputs(model_path, save_dir, device, reverse_mask_color=False):
-    # ckpt_path = "/home/qianq/mycodes/Painter/SegGPT/SegGPT_inference/pretrained_seggpt/seggpt_vit_large.pth"
     ckpt_path = model_path
-    ckpt_path = "/home/qianq/mycodes/Painter/SegGPT/SegGPT_inference/pretrained_seggpt/seggpt_vit_large.pth"
     model = "seggpt_vit_large_patch16_input896x448"
     seg_type = "instance"
     output_dir = save_dir
-    # output_dir = "/run/media/breastCancer/results_seggpt_prompt"
-    # input_dir = "/run/media/breastCancer/processed"
 
     train_meta_dir = "/run/media/breastCancer/processed/meta_train.json"
     test_meta_dir = "/run/media/breastCancer/processed/meta_test.json"
